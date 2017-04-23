@@ -1,9 +1,0 @@
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\bin\Debug\netcoreapp1.1\Infrastructure.deps.json
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\bin\Debug\netcoreapp1.1\Infrastructure.dll
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\bin\Debug\netcoreapp1.1\Infrastructure.pdb
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\bin\Debug\netcoreapp1.1\Core.dll
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\bin\Debug\netcoreapp1.1\Core.pdb
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\obj\Debug\netcoreapp1.1\Infrastructure.csprojResolveAssemblyReference.cache
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\obj\Debug\netcoreapp1.1\Infrastructure.AssemblyInfo.cs
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\obj\Debug\netcoreapp1.1\Infrastructure.dll
-C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Infrastructure\obj\Debug\netcoreapp1.1\Infrastructure.pdb
