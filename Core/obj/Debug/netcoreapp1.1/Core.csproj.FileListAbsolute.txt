@@ -1,0 +1,7 @@
+C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Core\bin\Debug\netcoreapp1.1\Core.deps.json
+C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Core\bin\Debug\netcoreapp1.1\Core.dll
+C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Core\bin\Debug\netcoreapp1.1\Core.pdb
+C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Core\obj\Debug\netcoreapp1.1\Core.csprojResolveAssemblyReference.cache
+C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Core\obj\Debug\netcoreapp1.1\Core.AssemblyInfo.cs
+C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Core\obj\Debug\netcoreapp1.1\Core.dll
+C:\Users\Erexo\Desktop\Projekty C#\Testy\ASP\Core\obj\Debug\netcoreapp1.1\Core.pdb
