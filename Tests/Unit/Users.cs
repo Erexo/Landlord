@@ -7,9 +7,9 @@ using Infrastructure.Repositories;
 using Core.Domain;
 using System.Threading.Tasks;
 
-namespace Tests
+namespace Tests.Unit
 {
-    public class UnitTests
+    public class Users
     {
         [Fact]
         public async Task register_async_should_invoke_add_async_on_repository()

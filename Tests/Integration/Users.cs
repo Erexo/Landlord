@@ -12,14 +12,14 @@ using Infrastructure.Commands.Users;
 using System.Text;
 using System.Net;
 
-namespace Tests
+namespace Tests.Integration
 {
-    public class IntegrationTests
+    public class Users
     {
         private readonly TestServer _server;
         private readonly HttpClient _client;
 
-        public IntegrationTests()
+        public Users()
         {
             _server = new TestServer(new WebHostBuilder()
                         .UseStartup<Startup>());

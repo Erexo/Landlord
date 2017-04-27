@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Services;
 using Infrastructure.DTO;
 using Infrastructure.Commands.Users;
 using System.Threading.Tasks;
+using Infrastructure.Commands;
 
 namespace ASP.Controllers
 {
@@ -11,10 +11,12 @@ namespace ASP.Controllers
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
+        private readonly ICommandDispatcher _commandDispatcher;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, ICommandDispatcher commandDispatcher)
         {
             _userService = userService;
+            _commandDispatcher = commandDispatcher;
         }
 
         [HttpGet("{login}")]
@@ -29,10 +31,11 @@ namespace ASP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateUser user)
+        public async Task<IActionResult> Post([FromBody]CreateUser command)
         {
-            await _userService.RegisterAsync(user.Login, user.Password, user.Email);
-            return Created($"users/{user.Login}", new object());
+            await _commandDispatcher.DispatchAsync(command);
+
+            return Created($"users/{command.Login}", new object());
         }
 
         /*[HttpPost]
