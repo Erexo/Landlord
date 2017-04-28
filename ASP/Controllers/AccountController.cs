@@ -9,22 +9,21 @@ namespace ASP.Controllers
 {
 
     [Route("[controller]")]
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ICommandDispatcher _commandDispatcher;
 
         public AccountController(IUserService userService, ICommandDispatcher commandDispatcher)
+            : base(commandDispatcher)
         {
             _userService = userService;
-            _commandDispatcher = commandDispatcher;
         }
 
         [HttpPut]
         [Route("password")]
         public async Task<IActionResult> Put([FromBody]ChangeUserPassword command)
         {
-            await _commandDispatcher.DispatchAsync(command);
+            await CommandDispatcher.DispatchAsync(command);
 
             return NoContent();
         }
