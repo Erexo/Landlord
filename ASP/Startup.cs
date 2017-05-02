@@ -1,13 +1,15 @@
-﻿using Infrastructure.Repositories;
-using Infrastructure.Services;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Infrastructure.DataAccess;
 using Infrastructure.IoC.Modules;
+using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using MySQL.Data.EntityFrameworkCore.Extensions;
 using System;
 
 namespace ASP
@@ -31,11 +33,19 @@ namespace ASP
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddScoped<IUserRepository, MemoryUserRepository>();
+            services.AddScoped<IUserRepository, DatabaseUserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddMvc();
 
-            var builder = new ContainerBuilder();
+            services.AddDbContext<LandlordContext>(options =>
+            {
+                //Error at Tests executing
+                //options.UseMySQL(Configuration.GetConnectionString("LandlordMySQLConnection"));
+
+                options.UseMySQL("server=localhost;userid=root;pwd=;port=3306;database=Landlord;sslmode=none;");
+            });
+            
+        var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule<CommandModule>();
             ApplicationContainer = builder.Build();

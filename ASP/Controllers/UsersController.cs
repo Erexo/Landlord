@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Services;
-using Infrastructure.DTO;
+﻿using Infrastructure.Commands;
 using Infrastructure.Commands.Users;
+using Infrastructure.DTO;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Infrastructure.Commands;
 
 namespace ASP.Controllers
 {
@@ -35,6 +35,14 @@ namespace ASP.Controllers
             await CommandDispatcher.DispatchAsync(command);
 
             return Created($"users/{command.Login}", new object());
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody]RemoveUser command)
+        {
+            await CommandDispatcher.DispatchAsync(command);
+
+            return NoContent();
         }
 
         /*[HttpPost]

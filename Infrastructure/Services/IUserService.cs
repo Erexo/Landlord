@@ -7,5 +7,6 @@ namespace Infrastructure.Services
     {
         Task<UserDTO> GetAsync(string login);
         Task RegisterAsync(string login, string password, string email);
+        Task RemoveAsync(string login, string password);
     }
 }

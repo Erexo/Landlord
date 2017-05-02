@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Infrastructure.Commands;
+﻿using Infrastructure.Commands;
 using Infrastructure.Commands.Users;
 using Infrastructure.Services;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Handlers.Users
 {

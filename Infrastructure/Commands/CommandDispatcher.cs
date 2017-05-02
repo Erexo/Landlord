@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using System.Threading.Tasks;
-using Autofac;
 
 namespace Infrastructure.Commands
 {

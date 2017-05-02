@@ -1,6 +1,6 @@
-﻿using System.Reflection;
+﻿using Autofac;
 using Infrastructure.Commands;
-using Autofac;
+using System.Reflection;
 
 namespace Infrastructure.IoC.Modules
 {
@@ -14,7 +14,7 @@ namespace Infrastructure.IoC.Modules
             builder.RegisterAssemblyTypes(assembly)
                    .AsClosedTypesOf(typeof(ICommandHandler<>))
                    .InstancePerLifetimeScope();
-
+            
             builder.RegisterType<CommandDispatcher>()
                 .As<ICommandDispatcher>()
                 .InstancePerLifetimeScope();

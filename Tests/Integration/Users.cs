@@ -1,16 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Net.Http;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.AspNetCore.Hosting;
+﻿using ASP;
 using FluentAssertions;
-using Xunit;
-using ASP;
-using Newtonsoft.Json;
-using Infrastructure.DTO;
+using Infrastructure.Commands;
 using Infrastructure.Commands.Users;
-using System.Text;
+using Infrastructure.DTO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Newtonsoft.Json;
+using System;
 using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests.Integration
 {
@@ -25,17 +26,6 @@ namespace Tests.Integration
                         .UseStartup<Startup>());
             _client = _server.CreateClient();
         }
-        
-        public async Task<UserDTO> get_user(string login)
-        {
-            var response = await _client.GetAsync($"users/{login}");
-            response.EnsureSuccessStatusCode();
-            
-            string responseString = await response.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserDTO>(responseString);
-            user.Login.ShouldBeEquivalentTo(login);
-            return user;
-        }
 
         [Fact]
         public async Task when_valid_login_user_should_exist()
@@ -49,19 +39,54 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task successfully_register_new_user()
+        public async Task successfully_register_and_remove_user()   //TODO: REMOVE
         {
-            CreateUser user = new CreateUser
+            CreateUser createUser = new CreateUser
             {
                 Login = "test",
                 Password = "secret",
                 Email = "test@example.com"
             };
-            string body = JsonConvert.SerializeObject(user);
-            var response = await _client.PostAsync("users", new StringContent(body, Encoding.UTF8, "application/json"));
 
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Created);
+            var createResponse = await _client.SendAsync(buildMessage(HttpMethod.Post, createUser, "users"));
+
+            createResponse.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Created);
             await get_user("test");
+
+            RemoveUser removeUser = new RemoveUser
+            {
+                Login = "test",
+                Password = "secret"
+            };
+
+            var removeResponse = await _client.SendAsync(buildMessage(HttpMethod.Delete, removeUser, "users"));
+            removeResponse.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NoContent);
+
+            var checkResponse = await _client.GetAsync($"users/test");
+            checkResponse.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
+        }
+
+        private async Task<UserDTO> get_user(string login)
+        {
+            var response = await _client.GetAsync($"users/{login}");
+            response.EnsureSuccessStatusCode();
+
+            string responseString = await response.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserDTO>(responseString);
+            user.Login.ShouldBeEquivalentTo(login);
+            return user;
+        }
+
+        private HttpRequestMessage buildMessage(HttpMethod method, ICommand command, string uri)
+        {
+            string body = JsonConvert.SerializeObject(command);
+
+            return new HttpRequestMessage
+            {
+                Content = new StringContent(body, Encoding.UTF8, "application/json"),
+                Method = method,
+                RequestUri = new Uri($"http://{_server.BaseAddress.Host}/{uri}")
+            };
         }
     }
 }

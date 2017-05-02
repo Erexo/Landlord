@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Domain
 {
     public class House
     {
-        public Guid OwnerID { get; protected set; }
-        public Guid OccupantID { get; protected set; }
+        public int ID { get; protected set; }
         public string City { get; protected set; }
         public string Address { get; protected set; }
         public uint Rooms { get; protected set; }
@@ -14,15 +14,22 @@ namespace Core.Domain
         public decimal Price { get; protected set; }
         public DateTime RentedAt { get; protected set; }
         public DateTime RentedUntil { get; protected set; }
-        public List<Mark> Marks { get; private set; }
+        
+        public User Owner { get; protected set; }
+
+        [ForeignKey("Occupant")]
+        public int? OccupantID { get; protected set; }
+        public User Occupant { get; protected set; }
+
+        public IList<Mark> Marks { get; private set; }
 
         protected House()
         {
         }
 
-        public House(Guid ownerID, string city, string address, uint rooms, uint capacity, decimal price)
+        public House(User owner, string city, string address, uint rooms, uint capacity, decimal price)
         {
-            OwnerID = ownerID;
+            Owner = owner;
             SetCity(city);
             SetAddress(address);
             SetRooms(rooms);

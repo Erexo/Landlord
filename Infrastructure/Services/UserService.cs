@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Linq;
+﻿using Core.Domain;
 using Infrastructure.DTO;
 using Infrastructure.Repositories;
-using Core.Domain;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
@@ -53,5 +53,17 @@ namespace Infrastructure.Services
             await _userRepository.AddAsync(user);
         }
 
+        public async Task RemoveAsync(string login, string password)
+        {
+            User user = await _userRepository.GetAsync(login);
+
+            if (user == null)
+                throw new Exception($"User with login '{login}' does not exist.");
+
+            if (user.Password != password)
+                throw new Exception($"User password does not match with given password.");
+
+            await _userRepository.RemoveAsync(user);
+        }
     }
 }

@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Services;
-using Infrastructure.DTO;
+﻿using Infrastructure.Commands;
 using Infrastructure.Commands.Users;
+using Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Infrastructure.Commands;
 
 namespace ASP.Controllers
 {

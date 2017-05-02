@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 
 namespace Core.Domain
 {
     public class User
     {
-        public Guid ID { get; protected set; }
+        public int ID { get; protected set; }
         public string Login { get; protected set; }
         public string Password { get; protected set; }
         public string Salt { get; protected set; }
@@ -13,6 +15,13 @@ namespace Core.Domain
         public string Email { get; protected set; }
         public DateTime CreationDate { get; protected set; }
         public DateTime LastUpdate { get; protected set; }
+
+        [InverseProperty("Owner")]
+        public IList<House> Houses { get; protected set; }
+        
+        [InverseProperty("Occupant")]
+        public House Location { get; protected set; }
+
 
         private readonly Regex emailRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
@@ -22,7 +31,6 @@ namespace Core.Domain
 
         public User(string login, string password, string salt, string email)
         {
-            ID = Guid.NewGuid();
             SetLogin(login);
             SetPassword(password);
             Salt = salt;

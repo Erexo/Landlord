@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Core.Domain;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Domain;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
@@ -16,7 +15,7 @@ namespace Infrastructure.Repositories
         };
 
 
-        public async Task<User> GetAsync(Guid id)
+        public async Task<User> GetAsync(int id)
             => await Task.FromResult(_users.SingleOrDefault(o => o.ID == id));
 
         public async Task<User> GetAsync(string login)
@@ -31,10 +30,10 @@ namespace Infrastructure.Repositories
             await Task.CompletedTask;
         }
 
-        public async Task RemoveAsync(Guid id)
+        public async Task RemoveAsync(User user)
         {
-            User user = await GetAsync(id);
             _users.Remove(user);
+            await Task.CompletedTask;
         }
 
         public async Task UpdateAsync(User user)

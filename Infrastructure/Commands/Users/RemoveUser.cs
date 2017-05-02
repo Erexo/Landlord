@@ -1,9 +1,8 @@
 ﻿namespace Infrastructure.Commands.Users
 {
-    public class CreateUser : ICommand
+    public class RemoveUser : ICommand
     {
         public string Login { get; set; }
         public string Password { get; set; }
-        public string Email { get; set; }
     }
 }

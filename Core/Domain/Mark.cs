@@ -2,27 +2,31 @@
 
 namespace Core.Domain
 {
-    public class Mark   //Value Object
+    public class Mark
     {
-        public Guid FromUser { get; private set; }
+        public int ID { get; private set; }
+        public User FromUser { get; private set; }
         public Int16 Value { get; private set; }
         public string Description { get; private set; }
         public DateTime IssueDate { get; private set; }
+        
+        public House House { get; private set; }
 
         private Mark()
         {
         }
 
-        private Mark(Guid FromUser, Int16 Value, string Description)
+        private Mark(House house, User FromUser, Int16 Value, string Description)
         {
+            House = house;
             this.FromUser = FromUser;
             setValue(Value);
             setDescription(Description);
             IssueDate = DateTime.UtcNow;
         }
 
-        public static Mark Create(Guid fromUser, Int16 value, string description)
-            => new Mark(fromUser, value, description);
+        public static Mark Create(House house, User fromUser, Int16 value, string description)
+            => new Mark(house, fromUser, value, description);
 
         private void setValue(Int16 value)
         {
