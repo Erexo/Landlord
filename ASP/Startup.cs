@@ -45,11 +45,11 @@ namespace ASP
                 options.UseMySQL("server=localhost;userid=root;pwd=;port=3306;database=Landlord;sslmode=none;");
             });
             
-        var builder = new ContainerBuilder();
+            var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule<CommandModule>();
+            builder.RegisterModule(new SettingsModule(Configuration));
             ApplicationContainer = builder.Build();
-
             return new AutofacServiceProvider(ApplicationContainer);
         }
 

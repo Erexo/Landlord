@@ -90,5 +90,10 @@ namespace Core.Domain
 
             Price = price;
         }
+
+        public void addMark(User fromUser, Int16 value, string description)
+        {
+            Marks.Add(Mark.Create(this, fromUser, value, description));
+        }
     }
 }

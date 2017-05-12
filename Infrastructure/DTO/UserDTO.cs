@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Core.Domain;
+using System;
+using System.Collections.Generic;
 
 namespace Infrastructure.DTO
 {
@@ -10,5 +12,7 @@ namespace Infrastructure.DTO
         public string Email { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastUpdate { get; set; }
+        public IList<House> Houses { get; set; }
+        public House Location { get; set; }
     }
 }

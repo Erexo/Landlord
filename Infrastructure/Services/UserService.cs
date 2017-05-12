@@ -2,6 +2,8 @@
 using Infrastructure.DTO;
 using Infrastructure.Repositories;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,7 +27,7 @@ namespace Infrastructure.Services
                 //throw new Exception($"User with login '{login}' does not exists.");
                 return null;
             }
-
+            
             return new UserDTO
             {
                 ID = user.ID,
@@ -33,8 +35,35 @@ namespace Infrastructure.Services
                 FullName = user.FullName,
                 Email = user.Email,
                 CreationDate = user.CreationDate,
-                LastUpdate = user.LastUpdate
+                LastUpdate = user.LastUpdate,
+                Houses = user.Houses,
+                Location = user.Location
             };
+        }
+
+        public async Task<List<UserDTO>> GetAllAsync()
+        {
+            IEnumerable<User> users = await _userRepository.GetAllAsync();
+            List<UserDTO> DTOusers = new List<UserDTO>();
+
+            foreach(User user in users)
+            {
+                UserDTO DTOuser = new UserDTO
+                {
+                    ID = user.ID,
+                    Login = user.Login,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    CreationDate = user.CreationDate,
+                    LastUpdate = user.LastUpdate,
+                    Houses = user.Houses,
+                    Location = user.Location
+                };
+
+                DTOusers.Add(DTOuser);
+            }
+
+            return DTOusers;
         }
 
         public async Task RegisterAsync(string login, string password, string email)
