@@ -39,7 +39,7 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task Successfully_register_and_remove_user()   //TODO: REMOVE
+        public async Task Successfully_register_and_remove_user()
         {
             CreateUser createUser = new CreateUser
             {

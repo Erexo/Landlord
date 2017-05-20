@@ -1,4 +1,5 @@
-﻿using Core.Domain;
+﻿using AutoMapper;
+using Core.Domain;
 using Infrastructure.DTO;
 using Infrastructure.Repositories;
 using System;
@@ -13,11 +14,13 @@ namespace Infrastructure.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IEncrypter _encrypter;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IEncrypter encrypter)
+        public UserService(IUserRepository userRepository, IEncrypter encrypter, IMapper mapper)
         {
             _userRepository = userRepository;
             _encrypter = encrypter;
+            _mapper = mapper;
         }
 
         public async Task<UserDTO> GetAsync(string login)
@@ -29,18 +32,8 @@ namespace Infrastructure.Services
                 //throw new Exception($"User with login '{login}' does not exists.");
                 return null;
             }
-            
-            return new UserDTO
-            {
-                ID = user.ID,
-                Login = user.Login,
-                FullName = user.FullName,
-                Email = user.Email,
-                CreationDate = user.CreationDate,
-                LastUpdate = user.LastUpdate,
-                Houses = user.Houses,
-                Location = user.Location
-            };
+
+            return _mapper.Map<User, UserDTO>(user);
         }
 
         public async Task<List<UserDTO>> GetAllAsync()
@@ -50,17 +43,7 @@ namespace Infrastructure.Services
 
             foreach(User user in users)
             {
-                UserDTO DTOuser = new UserDTO
-                {
-                    ID = user.ID,
-                    Login = user.Login,
-                    FullName = user.FullName,
-                    Email = user.Email,
-                    CreationDate = user.CreationDate,
-                    LastUpdate = user.LastUpdate,
-                    Houses = user.Houses,
-                    Location = user.Location
-                };
+                UserDTO DTOuser = _mapper.Map<User, UserDTO>(user);
 
                 DTOusers.Add(DTOuser);
             }
@@ -93,7 +76,9 @@ namespace Infrastructure.Services
             if (user == null)
                 throw new Exception($"User with login '{login}' does not exist.");
 
-            if (user.Password != password)
+            var hash = _encrypter.GetHash(password, user.Salt);
+
+            if (user.Password != hash)
                 throw new Exception($"User password does not match with given password.");
 
             await _userRepository.RemoveAsync(user);

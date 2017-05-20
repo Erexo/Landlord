@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Infrastructure.DataAccess;
 using Infrastructure.IoC.Modules;
 using Infrastructure.Repositories;
-using Infrastructure.Services;
 using Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,6 +52,7 @@ namespace ASP
             builder.RegisterModule<CommandModule>();
             builder.RegisterModule(new SettingsModule(Configuration));
             builder.RegisterModule<ServiceModule>();
+            builder.RegisterModule<AutoMapperModule>();
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
         }

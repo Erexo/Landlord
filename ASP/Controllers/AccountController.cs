@@ -25,7 +25,7 @@ namespace ASP.Controllers
         public async Task<IActionResult> Put([FromBody]ChangeUserPassword command)
         {
             await CommandDispatcher.DispatchAsync(command);
-
+        
             return NoContent();
         }
 
