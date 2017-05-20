@@ -28,18 +28,18 @@ namespace Tests.Integration
         }
 
         [Fact]
-        public async Task when_valid_login_user_should_exist()
-            => await get_user("login1");
+        public async Task When_valid_login_user_should_exist()
+            => await Get_user("login1");
 
         [Fact]
-        public async Task when_invalid_login_user_should_not_exist()
+        public async Task When_invalid_login_user_should_not_exist()
         {
             var response = await _client.GetAsync($"users/login0");
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }
 
         [Fact]
-        public async Task successfully_register_and_remove_user()   //TODO: REMOVE
+        public async Task Successfully_register_and_remove_user()   //TODO: REMOVE
         {
             CreateUser createUser = new CreateUser
             {
@@ -48,10 +48,10 @@ namespace Tests.Integration
                 Email = "test@example.com"
             };
 
-            var createResponse = await _client.SendAsync(buildMessage(HttpMethod.Post, createUser, "users"));
+            var createResponse = await _client.SendAsync(BuildMessage(HttpMethod.Post, createUser, "users"));
 
             createResponse.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Created);
-            await get_user("test");
+            await Get_user("test");
 
             RemoveUser removeUser = new RemoveUser
             {
@@ -59,14 +59,14 @@ namespace Tests.Integration
                 Password = "secret"
             };
 
-            var removeResponse = await _client.SendAsync(buildMessage(HttpMethod.Delete, removeUser, "users"));
+            var removeResponse = await _client.SendAsync(BuildMessage(HttpMethod.Delete, removeUser, "users"));
             removeResponse.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NoContent);
 
             var checkResponse = await _client.GetAsync($"users/test");
             checkResponse.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }
 
-        private async Task<UserDTO> get_user(string login)
+        private async Task<UserDTO> Get_user(string login)
         {
             var response = await _client.GetAsync($"users/{login}");
             response.EnsureSuccessStatusCode();
@@ -77,7 +77,7 @@ namespace Tests.Integration
             return user;
         }
 
-        private HttpRequestMessage buildMessage(HttpMethod method, ICommand command, string uri)
+        private HttpRequestMessage BuildMessage(HttpMethod method, ICommand command, string uri)
         {
             string body = JsonConvert.SerializeObject(command);
 

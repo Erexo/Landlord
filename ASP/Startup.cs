@@ -4,13 +4,16 @@ using Infrastructure.DataAccess;
 using Infrastructure.IoC.Modules;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using MySQL.Data.EntityFrameworkCore.Extensions;
 using System;
+using System.Text;
 
 namespace ASP
 {
@@ -34,7 +37,7 @@ namespace ASP
         {
             // Add framework services.
             services.AddScoped<IUserRepository, DatabaseUserRepository>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddMemoryCache();
             services.AddMvc();
 
             services.AddDbContext<LandlordContext>(options =>
@@ -49,6 +52,7 @@ namespace ASP
             builder.Populate(services);
             builder.RegisterModule<CommandModule>();
             builder.RegisterModule(new SettingsModule(Configuration));
+            builder.RegisterModule<ServiceModule>();
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
         }
@@ -60,6 +64,19 @@ namespace ASP
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            var AuthSettings = app.ApplicationServices.GetService<AuthenticationSettings>();
+
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                AutomaticAuthenticate = true,
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = AuthSettings.Issuer,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthSettings.PrivateKey))
+                }
+            });
+            
             app.UseMvc();
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }

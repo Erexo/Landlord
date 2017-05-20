@@ -7,12 +7,7 @@ namespace Infrastructure.Repositories
 {
     public class MemoryUserRepository : IUserRepository
     {
-        private static List<User> _users = new List<User>
-        {
-            new User("login1", "qwer123", "43248932", "1@example.com"),
-            new User("login2", "qwer123", "43248932", "2@example.com"),
-            new User("login3", "qwer123", "43248932", "3@example.com")
-        };
+        private static List<User> _users = new List<User>();
 
 
         public async Task<User> GetAsync(int id)

@@ -29,10 +29,10 @@ namespace Core.Domain
         {
         }
 
-        public User(string login, string password, string salt, string email)
+        public User(string login, string password, string hash, string salt, string email)
         {
             SetLogin(login);
-            SetPassword(password);
+            SetPassword(password, hash);
             Salt = salt;
             SetEmail(email);
             CreationDate = DateTime.UtcNow;
@@ -51,7 +51,7 @@ namespace Core.Domain
             LastUpdate = DateTime.UtcNow;
         }
 
-        public void SetPassword(string password)
+        public void SetPassword(string password, string hash)
         {
             if (string.IsNullOrEmpty(password))
                 throw new Exception("Empty Password.");
@@ -60,7 +60,7 @@ namespace Core.Domain
             if (Password == password)
                 return;
 
-            Password = password;
+            Password = hash;
             LastUpdate = DateTime.UtcNow;
         }
 

@@ -12,10 +12,12 @@ namespace Infrastructure.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IEncrypter _encrypter;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IEncrypter encrypter)
         {
             _userRepository = userRepository;
+            _encrypter = encrypter;
         }
 
         public async Task<UserDTO> GetAsync(string login)
@@ -76,9 +78,11 @@ namespace Infrastructure.Services
             var users = await _userRepository.GetAllAsync();
             if (users.SingleOrDefault(o => o.Email == email) != null)
                 throw new Exception($"Email '{email}' is already registered.");
-            
-            string salt = Guid.NewGuid().ToString("N");
-            user = new User(login, password, salt, email);
+
+            string salt = _encrypter.GetSalt(password);
+            string hash = _encrypter.GetHash(password, salt);
+
+            user = new User(login, password, hash, salt, email);
             await _userRepository.AddAsync(user);
         }
 
@@ -93,6 +97,20 @@ namespace Infrastructure.Services
                 throw new Exception($"User password does not match with given password.");
 
             await _userRepository.RemoveAsync(user);
+        }
+
+        public async Task LoginAsync(string login, string password)
+        {
+            User user = await _userRepository.GetAsync(login);
+
+            if (user == null)
+                throw new Exception($"Invalid user data.");
+            
+            string hash = _encrypter.GetHash(password, user.Salt);
+
+            if (user.Password != hash)
+                throw new Exception($"Invalid user data.");
+
         }
     }
 }
