@@ -1,41 +1,27 @@
 ﻿using Infrastructure.Commands;
 using Infrastructure.Commands.Users;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace ASP.Controllers
 {
-
-    [Route("[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountController : ApiControllerBase
     {
-        private readonly IUserService _userService;
-        private readonly IJwtHandler _jwtHandler;
-
-        public AccountController(IUserService userService, ICommandDispatcher commandDispatcher, IJwtHandler jwtHandler)
+        public AccountController(ICommandDispatcher commandDispatcher)
             : base(commandDispatcher)
         {
-            _userService = userService;
-            _jwtHandler = jwtHandler;
         }
 
+        [Authorize]
         [HttpPut]
         [Route("password")]
         public async Task<IActionResult> Put([FromBody]ChangeUserPassword command)
         {
-            await CommandDispatcher.DispatchAsync(command);
+            await DispatchAsync(command);
         
             return NoContent();
-        }
-
-        [Route("token")]
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            await Task.CompletedTask;
-            var token = _jwtHandler.CreateToken("testo");
-            return Json(token);
         }
     }
 }

@@ -5,7 +5,8 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <None Include="appsettings.json" CopyToOutputDirectory="Always" />
+    <None Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="nlog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   
   <ItemGroup>

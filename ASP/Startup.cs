@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MySQL.Data.EntityFrameworkCore.Extensions;
+using NLog.Extensions.Logging;
+using NLog.Web;
 using System;
 using System.Text;
 
@@ -61,8 +63,9 @@ namespace ASP
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
             ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
+            loggerFactory.AddNLog();
 
             var AuthSettings = app.ApplicationServices.GetService<AuthenticationSettings>();
 
@@ -78,7 +81,10 @@ namespace ASP
             });
             
             app.UseMvc();
+            app.AddNLogWeb();
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
+
+            env.ConfigureNLog("nlog.config");
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Infrastructure.Services
     public interface IUserService : IService
     {
         Task<UserDTO> GetAsync(string login);
+        Task<ExtendedUserDTO> GetExtendedAsync(string login);
         Task<List<UserDTO>> GetAllAsync();
         Task RegisterAsync(string login, string password, string email);
         Task RemoveAsync(string login, string password);

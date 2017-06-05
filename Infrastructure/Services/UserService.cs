@@ -33,7 +33,20 @@ namespace Infrastructure.Services
                 return null;
             }
 
-            return _mapper.Map<User, UserDTO>(user);
+            return _mapper.Map<UserDTO>(user);
+        }
+
+        public async Task<ExtendedUserDTO> GetExtendedAsync(string login)
+        {
+            User user = await _userRepository.GetAsync(login);
+
+            if (user == null)
+            {
+                //throw new Exception($"User with login '{login}' does not exists.");
+                return null;
+            }
+
+            return _mapper.Map<ExtendedUserDTO>(user);
         }
 
         public async Task<List<UserDTO>> GetAllAsync()

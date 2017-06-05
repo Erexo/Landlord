@@ -12,6 +12,7 @@ namespace Infrastructure.IoC.Modules
             builder.RegisterInstance(new MapperConfiguration(config =>
             {
                 config.CreateMap<User, UserDTO>();
+                config.CreateMap<User, ExtendedUserDTO>();
             })
             .CreateMapper()).SingleInstance();
         }

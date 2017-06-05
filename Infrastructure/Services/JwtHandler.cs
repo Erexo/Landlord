@@ -25,6 +25,7 @@ namespace Infrastructure.Services
             Claim[] claims = new Claim[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, login),
+                new Claim(JwtRegisteredClaimNames.UniqueName, login),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToEpoch().ToString(), ClaimValueTypes.Integer64)
             };
