@@ -12,19 +12,29 @@ namespace Infrastructure.Handlers.Users
         private readonly IUserService _userService;
         private readonly IJwtHandler _jwtHandler;
         private readonly IMemoryCache _memoryCache;
+        private readonly IHandler _handler;
 
-        public LoginUserHandler(IUserService userService, IJwtHandler jwtHandler, IMemoryCache memoryCache)
+        public LoginUserHandler(IUserService userService, IJwtHandler jwtHandler, 
+            IMemoryCache memoryCache, IHandler handler)
         {
             _userService = userService;
             _jwtHandler = jwtHandler;
             _memoryCache = memoryCache;
+            _handler = handler;
         }
 
         public async Task HandleAsync(LoginUser command)
         {
-            await _userService.LoginAsync(command.Login, command.Password);
-            var token = _jwtHandler.CreateToken(command.Login);
-            _memoryCache.Set(command.TokenId, token, TimeSpan.FromSeconds(5));
+            _handler.Run(async () => { await _userService.LoginAsync(command.Login, command.Password); })
+                .Next()
+                .Run(async () =>
+                {
+                    var token = _jwtHandler.CreateToken(command.Login);
+                    _memoryCache.Set(command.TokenId, token, TimeSpan.FromSeconds(5));
+                    await Task.CompletedTask;
+                });
+            await _handler.ExecuteAllAsync();
+            
         }
     }
 }
