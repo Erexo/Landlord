@@ -11,6 +11,6 @@ namespace Infrastructure.Repositories
         Task<IEnumerable<User>> GetAllAsync();
         Task AddAsync(User user);
         Task UpdateAsync(User user);
-        Task RemoveAsync(User id);
+        Task RemoveAsync(User user);
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson.Serialization.Conventions;
 using MySQL.Data.EntityFrameworkCore.Extensions;
 using NLog.Extensions.Logging;
 using NLog.Web;
@@ -37,7 +38,7 @@ namespace ASP
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddScoped<IUserRepository, DatabaseUserRepository>();
+            services.AddScoped<IUserRepository, MongodbUserRepository>();
             services.AddMemoryCache();
             services.AddMvc();
 
@@ -48,13 +49,16 @@ namespace ASP
 
                 options.UseMySQL("server=localhost;userid=root;pwd=;port=3306;database=Landlord;sslmode=none;");
             });
-            
+
+            ConventionRegistry.Register("LandlordConventions", new ConventionPack(), x => true);
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule<CommandModule>();
             builder.RegisterModule(new SettingsModule(Configuration));
             builder.RegisterModule<ServiceModule>();
             builder.RegisterModule<AutoMapperModule>();
+            builder.RegisterModule<MongoModule>();
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
         }

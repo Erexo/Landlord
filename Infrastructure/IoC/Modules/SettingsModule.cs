@@ -20,6 +20,8 @@ namespace Infrastructure.IoC.Modules
                    .SingleInstance();
             builder.RegisterInstance(_configuration.GetSettings<AuthenticationSettings>())
                    .SingleInstance();
+            builder.RegisterInstance(_configuration.GetSettings<MongoSettings>())
+                   .SingleInstance();
         }
     }
 }

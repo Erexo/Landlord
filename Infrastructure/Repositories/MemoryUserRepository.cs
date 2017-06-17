@@ -11,7 +11,7 @@ namespace Infrastructure.Repositories
 
 
         public async Task<User> GetAsync(int id)
-            => await Task.FromResult(_users.SingleOrDefault(o => o.ID == id));
+            => await Task.FromResult(_users.SingleOrDefault(o => o.Id == id));
 
         public async Task<User> GetAsync(string login)
             => await Task.FromResult(_users.SingleOrDefault(o => o.Login == login));

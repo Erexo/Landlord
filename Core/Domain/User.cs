@@ -7,7 +7,7 @@ namespace Core.Domain
 {
     public class User
     {
-        public int ID { get; protected set; }
+        public int Id { get; protected set; }
         public string Login { get; protected set; }
         public string Password { get; protected set; }
         public string Salt { get; protected set; }
@@ -24,6 +24,7 @@ namespace Core.Domain
 
 
         private readonly Regex emailRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+        private Random _random = new Random();
 
         protected User()
         {
@@ -31,6 +32,7 @@ namespace Core.Domain
 
         public User(string login, string password, string hash, string salt, string email)
         {
+            Id = _random.Next();
             SetLogin(login);
             SetPassword(password, hash);
             Salt = salt;
