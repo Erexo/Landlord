@@ -31,6 +31,7 @@ namespace Infrastructure.Handlers.Users
                 {
                     var token = _jwtHandler.CreateToken(command.Login);
                     _memoryCache.Set(command.TokenId, token, TimeSpan.FromSeconds(5));
+
                     await Task.CompletedTask;
                 });
             await _handler.ExecuteAllAsync();

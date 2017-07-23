@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure.DTO;
+using System;
 
 namespace Infrastructure.Commands.Users
 {
@@ -7,5 +8,7 @@ namespace Infrastructure.Commands.Users
         public Guid TokenId { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+
+        public JwtDTO JwtToken { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Infrastructure.Repositories;
 using Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,7 +39,7 @@ namespace ASP
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddScoped<IUserRepository, MongodbUserRepository>();
+            services.AddScoped<IUserRepository, DatabaseUserRepository>();
             services.AddMemoryCache();
             services.AddMvc();
 
@@ -47,7 +48,8 @@ namespace ASP
                 //Error at Tests executing
                 //options.UseMySQL(Configuration.GetConnectionString("LandlordMySQLConnection"));
 
-                options.UseMySQL("server=localhost;userid=root;pwd=;port=3306;database=Landlord;sslmode=none;");
+                //options.UseMySQL("server=localhost;userid=root;pwd=;port=3306;database=Landlord;sslmode=none;");
+                options.UseNpgsql("User ID=landlord;Password=Qwer123$;Host=localhost;Port=5432;Database=landlord;Pooling=true;");
             });
 
             ConventionRegistry.Register("LandlordConventions", new ConventionPack(), x => true);
@@ -59,6 +61,8 @@ namespace ASP
             builder.RegisterModule<ServiceModule>();
             builder.RegisterModule<AutoMapperModule>();
             builder.RegisterModule<MongoModule>();
+            builder.RegisterModule<DapperModule>();
+
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
         }
